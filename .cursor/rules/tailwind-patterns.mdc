@@ -1,0 +1,4 @@
+description: Tailwind CSS and shadcn/ui component patterns for the SaaS scaffold
+globs: ["**/*.tsx"]
+alwaysApply: false
+---

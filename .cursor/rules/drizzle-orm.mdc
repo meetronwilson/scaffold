@@ -1,0 +1,4 @@
+description: Drizzle ORM patterns and best practices for the SaaS scaffold
+globs: ["src/lib/db/**/*.ts"]
+alwaysApply: false
+---

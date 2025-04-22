@@ -1,0 +1,4 @@
+description: Next.js App Router patterns and best practices
+globs: ["src/app/**/*.tsx", "src/app/**/*.ts"]
+alwaysApply: false
+---

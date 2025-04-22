@@ -1,0 +1,4 @@
+description: Stripe integration patterns and best practices for the SaaS scaffold
+globs: ["src/lib/stripe/**/*.ts", "src/app/api/stripe/**/*.ts", "src/components/subscription/**/*.tsx"]
+alwaysApply: false
+---

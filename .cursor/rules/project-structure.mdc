@@ -1,0 +1,4 @@
+description: Project structure and organization rules for the SaaS scaffold
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: true
+---
