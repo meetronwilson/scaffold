@@ -1,4 +1,128 @@
-description: Stripe integration patterns and best practices for the SaaS scaffold
-globs: ["src/lib/stripe/**/*.ts", "src/app/api/stripe/**/*.ts", "src/components/subscription/**/*.tsx"]
+---
+description: Implementation patterns for Stripe including client setup, checkout sessions, webhooks, and security best practices.
+globs: 
 alwaysApply: false
 ---
+# Stripe Integration Patterns
+
+Follow these patterns when working with Stripe in this SaaS scaffold:
+
+## Stripe Client Setup
+
+- Configure the Stripe client in `src/lib/stripe/config.ts`
+- Follow this pattern:
+
+```typescript
+import Stripe from 'stripe'
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2023-10-16', // Use the latest stable API version
+  appInfo: {
+    name: 'MySaaSApp',
+    version: '1.0.0',
+  },
+})
+```
+
+## Checkout Sessions
+
+- Create checkout sessions in `src/lib/stripe/checkout.ts`
+- Always include:
+  - Success and cancel URLs
+  - Customer email or ID
+  - Mode (subscription/payment)
+  - Proper metadata for order context
+- Follow this pattern:
+
+```typescript
+export async function createCheckoutSession({
+  priceId,
+  customerId,
+  successUrl,
+  cancelUrl,
+}) {
+  return await stripe.checkout.sessions.create({
+    customer: customerId,
+    line_items: [{ price: priceId, quantity: 1 }],
+    mode: 'subscription',
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    metadata: {
+      // Additional context for the order
+    }
+  })
+}
+```
+
+## Billing Portal
+
+- Create billing portal sessions in `src/lib/stripe/checkout.ts`
+- Include return URL
+- Follow this pattern:
+
+```typescript
+export async function createBillingPortalSession({
+  customerId,
+  returnUrl,
+}) {
+  return await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: returnUrl,
+  })
+}
+```
+
+## Webhooks
+
+- Handle webhooks in `src/app/api/stripe/webhook/route.ts`
+- Verify webhook signatures
+- Update database records based on events
+- Support key event types:
+  - `checkout.session.completed`
+  - `customer.subscription.updated`
+  - `customer.subscription.deleted`
+  - `invoice.paid`
+  - `invoice.payment_failed`
+- Follow this pattern:
+
+```typescript
+export async function POST(req: Request) {
+  const body = await req.text()
+  const signature = headers().get('stripe-signature')
+  
+  try {
+    const event = stripe.webhooks.constructEvent(
+      body,
+      signature!,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    )
+    
+    // Handle the event based on its type
+    switch (event.type) {
+      case 'checkout.session.completed':
+        // Handle completed checkout
+        break
+      // Handle other events...
+    }
+    
+    return new Response(null, { status: 200 })
+  } catch (error) {
+    return new Response(`Webhook Error: ${error.message}`, { status: 400 })
+  }
+}
+```
+
+## Frontend Components
+
+- Create consistent UI components for subscriptions
+- Implement a pricing table in `src/components/subscription/pricing-table.tsx`
+- Create a checkout button in `src/components/subscription/checkout-button.tsx`
+- Display subscription status in `src/components/subscription/subscription-status.tsx`
+
+## Security Considerations
+
+- Never log complete Stripe webhook payloads (sensitive data)
+- Use environment variables for all Stripe keys
+- Implement proper error handling for all Stripe API calls
+- Use idempotency keys for critical operations
+- Verify webhook signatures to prevent replay attacks

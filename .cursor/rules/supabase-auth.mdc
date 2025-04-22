@@ -1,7 +1,7 @@
 ---
-description: Rules to enforce the use of Supabase SSR for authentication instead of deprecated auth-helpers
-globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
-alwaysApply: true
+description: Authentication guidelines to enforce the use of Supabase SSR instead of deprecated auth-helpers, with patterns for proper implementation.
+globs: 
+alwaysApply: false
 ---
 ---
 description: Use this rule any time you are dealing with authentication. 

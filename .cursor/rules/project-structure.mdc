@@ -1,4 +1,46 @@
-description: Project structure and organization rules for the SaaS scaffold
-globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+---
+description: 
+globs: 
 alwaysApply: true
 ---
+# Project Structure Rules
+
+This SaaS scaffold follows a specific structure to maintain consistency and separation of concerns. Follow these rules when creating or modifying files:
+
+## Route Group Organization
+
+- All auth-related pages go in the `src/app/(auth)/` route group
+- All dashboard/authenticated pages go in the `src/app/(dashboard)/` route group
+- All public/marketing pages go in the `src/app/(marketing)/` route group
+- API routes go in `src/app/api/` directory
+
+## Component Organization
+
+- UI components go in `src/components/ui/`
+- Authentication components go in `src/components/auth/`
+- Layout components go in `src/components/layout/`
+- Dashboard components go in `src/components/dashboard/`
+- Subscription components go in `src/components/subscription/`
+
+## Utility Organization
+
+- Supabase clients go in `src/lib/supabase/`
+- Database utilities go in `src/lib/db/`
+- Stripe utilities go in `src/lib/stripe/`
+- Helper functions go in `src/lib/utils/`
+
+## Naming Conventions
+
+- React components use PascalCase
+- Utility functions use camelCase
+- File names use kebab-case
+- Pages are named `page.tsx`
+- Layouts are named `layout.tsx`
+- API routes are named `route.ts`
+
+## File Structure Best Practices
+
+- Keep components focused on a single responsibility
+- Group related functionality in appropriate directories
+- Use route groups (parentheses in folder names) to organize related routes
+- Keep API routes organized by domain/feature

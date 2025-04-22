@@ -1,4 +1,60 @@
-description: Next.js App Router patterns and best practices
-globs: ["src/app/**/*.tsx", "src/app/**/*.ts"]
+---
+description: Best practices for Next.js App Router usage including component types, data fetching, routing, and metadata patterns.
+globs: 
 alwaysApply: false
 ---
+# Next.js App Router Patterns
+
+Follow these patterns when working with Next.js App Router in this SaaS scaffold:
+
+## Client vs Server Components
+
+- Default to Server Components unless you need client-side interactivity
+- Add 'use client' directive only when needed (hooks, event handlers, browser APIs)
+- Keep client components as small and focused as possible
+
+## Data Fetching
+
+- Use server components for data fetching when possible
+- Fetch data directly in server components without useEffect
+- Follow React's recommended patterns for async/await in server components
+- For client components, use SWR or React Query for data fetching with proper error handling and loading states
+
+## Route Groups and Layouts
+
+- Use route groups (folders with parentheses) to organize related routes that share a layout
+- Create specific layouts for each section (marketing, dashboard, auth)
+- Avoid deep nesting of layouts to prevent performance issues
+- Use loading.tsx files for streaming and Suspense
+
+## Metadata
+
+- Define metadata at the layout or page level
+- Use dynamic metadata generation for SEO optimization
+- Follow this pattern for metadata:
+
+```tsx
+export const metadata: Metadata = {
+  title: "Page Title | SaaS App",
+  description: "Page description for SEO",
+}
+```
+
+## Error Handling
+
+- Implement error.tsx files for graceful error handling
+- Create not-found.tsx files for 404 scenarios
+- Use try/catch blocks for error handling in server actions and components
+
+## API Routes
+
+- Use Route Handlers (route.ts) for API endpoints
+- Structure API routes by feature (e.g., /api/stripe/webhook)
+- Implement proper error handling and status codes
+- Add authentication checks for protected endpoints
+
+## Navigation
+
+- Use Next.js Link component for client-side navigation
+- Implement proper routing with dynamic segments when needed
+- Avoid hardcoded URLs, use relative paths or route constants

@@ -1,4 +1,79 @@
-description: Drizzle ORM patterns and best practices for the SaaS scaffold
-globs: ["src/lib/db/**/*.ts"]
+---
+description: Standards for database schema definition, relations, and query patterns using Drizzle ORM. Reference when integrating with the database from any part of the application.
+globs: 
 alwaysApply: false
 ---
+# Drizzle ORM Patterns
+
+Follow these patterns when working with Drizzle ORM in this SaaS scaffold:
+
+## Schema Definition
+
+- Define all tables in `src/lib/db/schema.ts`
+- Use appropriate column types from `drizzle-orm/pg-core`
+- Follow this pattern for table definitions:
+
+```typescript
+export const tableName = pgTable('table_name', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  // other columns...
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+```
+
+- Use snake_case for database column names
+- Use camelCase for JavaScript property names
+
+## Relations
+
+- Define relationships using Drizzle's relations API
+- Place relation definitions after table definitions
+- Follow this pattern:
+
+```typescript
+export const tableRelations = relations(tableName, ({ one, many }) => ({
+  relatedTable: one(otherTable, {
+    fields: [tableName.foreignKey],
+    references: [otherTable.primaryKey],
+  }),
+}))
+```
+
+## Database Client
+
+- Use the db client from `src/lib/db/index.ts`
+- Follow connection pooling best practices
+- Set appropriate client options based on environment (dev/prod)
+
+## Queries
+
+- Use Drizzle's SQL-like query builder for complex queries
+- Use appropriate type safety with prepared statements
+- Handle errors and constraints properly
+- Follow this pattern for queries:
+
+```typescript
+// Example of a select query
+const users = await db.select().from(usersTable).where(eq(usersTable.id, userId))
+
+// Example of an insert
+const newUser = await db.insert(usersTable).values({
+  email,
+  name,
+}).returning()
+```
+
+## Migrations
+
+- Use `drizzle-kit` for migrations
+- Run migrations during deployment
+- Test migrations thoroughly before deploying
+- Document breaking changes
+
+## Stripe Integration with Drizzle
+
+- Maintain consistency between Stripe data and database
+- Use transactions for critical operations
+- Keep Stripe product and price IDs in the database
+- Sync Stripe webhook events with database records

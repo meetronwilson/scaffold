@@ -1,4 +1,87 @@
-description: Tailwind CSS and shadcn/ui component patterns for the SaaS scaffold
-globs: ["**/*.tsx"]
+---
+description: UI component and styling guidelines using Tailwind CSS and shadcn/ui with examples of proper implementation.
+globs: 
 alwaysApply: false
 ---
+# Tailwind and UI Component Patterns
+
+Follow these patterns when working with Tailwind CSS and shadcn/ui components in this SaaS scaffold:
+
+##Priority
+- always use ShadCN UI component if they exist over building your own
+- install with shadcn NOT shadcn-ui for CLI
+
+## Tailwind Classes
+
+- Use Tailwind utilities directly in className props
+- Prefer compositional approach with multiple small utilities over custom classes
+- Use the clsx or cn utility for conditional classes:
+
+```tsx
+import { cn } from "@/lib/utils"
+
+<div className={cn(
+  "base-styles-here",
+  condition && "conditional-styles-here"
+)}>
+```
+
+- Maintain consistent spacing and sizing scales
+- Use Tailwind's color palette consistently throughout the app
+
+## shadcn/ui Components
+
+- Import UI components from `src/components/ui/`
+- Use the Button component for all buttons with appropriate variants
+- Follow shadcn/ui patterns for forms, dialogs, and other interactive elements
+- Example button usage:
+
+```tsx
+import { Button } from "@/components/ui/button"
+
+<Button 
+  variant="default" // or "outline", "ghost", "link"
+  size="default" // or "sm", "lg"
+  onClick={handleClick}
+>
+  Click me
+</Button>
+```
+
+## Custom Component Patterns
+
+- Implement reusable layouts with appropriate padding and spacing
+- Use consistent card patterns for dashboard elements
+- Follow accessible design patterns (proper contrast, focus states)
+- Create responsive designs using Tailwind breakpoints (sm, md, lg, xl)
+
+## Dark Mode
+
+- Support dark mode using the app's theme provider
+- Use the theme-toggle component for user control
+- Test components in both light and dark modes
+
+## Typography
+
+- Use consistent text sizes and weights
+- Follow this pattern for headings:
+
+```tsx
+<h1 className="text-3xl font-bold tracking-tight">Page Title</h1>
+<h2 className="text-2xl font-semibold">Section Title</h2>
+<h3 className="text-xl font-medium">Subsection Title</h3>
+```
+
+## Forms
+
+- Use shadcn/ui form components with appropriate validation
+- Provide clear error states and messages
+- Implement consistent loading and success states
+- Add appropriate aria attributes for accessibility
+
+## Layout
+
+- Use flexbox and grid for layouts
+- Implement consistent page container widths
+- Follow responsive patterns with mobile-first approach
+- Use consistent spacing between elements
