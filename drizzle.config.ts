@@ -7,9 +7,9 @@ dotenv.config({ path: '.env.local' })
 export default defineConfig({
   schema: './src/lib/db/schema.ts',
   out: './src/lib/db/migrations',
-  driver: 'pg', // PostgreSQL driver
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL!,
   },
   // PostgreSQL specific options
   verbose: true, // Display detailed logs during migration
