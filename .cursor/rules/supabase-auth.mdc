@@ -1,0 +1,49 @@
+---
+description: Rules to enforce the use of Supabase SSR for authentication instead of deprecated auth-helpers
+globs: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+alwaysApply: true
+---
+---
+description: Use this rule any time you are dealing with authentication. 
+globs: 
+alwaysApply: false
+---
+# Supabase Authentication Rules
+
+- Do not use the deprecated @supabase/auth-helpers-nextjs package. Replace with @supabase/ssr instead.
+- Use createServerClient instead of createServerComponentClient
+- Use createBrowserClient instead of createClientComponentClient  
+- Use createServerClient instead of createMiddlewareClient in middleware.ts
+- Ensure proper cookie handling when using createServerClient
+- Follow consistent naming patterns for Supabase client creation functions
+
+## Specific Rules
+
+1. ⚠️ DEPRECATED: Do not use @supabase/auth-helpers-nextjs. Replace with @supabase/ssr. Use createServerClient/createBrowserClient instead.
+
+2. ⚠️ DEPRECATED: Replace createClientComponentClient with createBrowserClient from @supabase/ssr
+
+3. ⚠️ DEPRECATED: Replace createServerComponentClient with createServerClient from @supabase/ssr
+
+4. ⚠️ DEPRECATED: Replace createMiddlewareClient with createServerClient from @supabase/ssr in middleware.ts
+
+5. createServerClient should include proper cookie handling for SSR:
+```typescript
+// Correct usage
+const supabase = createServerClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  {
+    cookies: cookieStore
+  }
+)
+```
+
+6. Use standard naming for client creation functions: createServerSupabaseClient or createClientSupabaseClient
+
+## Auto-Fix Patterns
+
+- Import from @supabase/auth-helpers-nextjs -> @supabase/ssr
+- createClientComponentClient -> createBrowserClient
+- createServerComponentClient -> createServerClient
+- createMiddlewareClient -> createServerClient

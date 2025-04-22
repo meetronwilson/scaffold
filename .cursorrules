@@ -1,0 +1,76 @@
+{
+  "name": "Supabase Authentication Rules",
+  "description": "Rules to enforce the use of Supabase SSR for authentication instead of deprecated auth-helpers",
+  "rules": [
+    {
+      "name": "prevent-auth-helpers-import",
+      "description": "Prevent import from deprecated @supabase/auth-helpers-nextjs",
+      "pattern": "import.*from\\s+['\"]@supabase/auth-helpers-nextjs['\"]",
+      "message": "⚠️ DEPRECATED: Do not use @supabase/auth-helpers-nextjs. Replace with @supabase/ssr. Use createServerClient/createBrowserClient instead.",
+      "severity": "error"
+    },
+    {
+      "name": "prevent-createClientComponentClient",
+      "description": "Prevent use of deprecated createClientComponentClient",
+      "pattern": "createClientComponentClient",
+      "message": "⚠️ DEPRECATED: Replace createClientComponentClient with createBrowserClient from @supabase/ssr",
+      "severity": "error"
+    },
+    {
+      "name": "prevent-createServerComponentClient",
+      "description": "Prevent use of deprecated createServerComponentClient",
+      "pattern": "createServerComponentClient",
+      "message": "⚠️ DEPRECATED: Replace createServerComponentClient with createServerClient from @supabase/ssr",
+      "severity": "error"
+    },
+    {
+      "name": "prevent-createMiddlewareClient",
+      "description": "Prevent use of deprecated createMiddlewareClient",
+      "pattern": "createMiddlewareClient",
+      "message": "⚠️ DEPRECATED: Replace createMiddlewareClient with createServerClient from @supabase/ssr in middleware.ts",
+      "severity": "error"
+    },
+    {
+      "name": "ensure-proper-cookie-handling",
+      "description": "Ensure proper cookie handling in createServerClient usage",
+      "pattern": "createServerClient\\([^)]*\\)(?!.*cookies)",
+      "message": "createServerClient should include proper cookie handling for SSR",
+      "severity": "warning"
+    },
+    {
+      "name": "promote-ssr-import",
+      "description": "Recommend import from @supabase/ssr",
+      "pattern": "(?<!from\\s+['\"])supabase(?!\\.com)",
+      "message": "Consider using @supabase/ssr for authentication in Next.js apps",
+      "severity": "info"
+    },
+    {
+      "name": "recommend-auth-ts-structure",
+      "description": "Recommend consistent structure for auth utility files",
+      "pattern": "export\\s+function\\s+createSupabaseClient",
+      "message": "Use standard naming: createServerSupabaseClient or createClientSupabaseClient with proper cookie handling",
+      "severity": "info"
+    }
+  ],
+  "ignoreFiles": [
+    "**/*.md",
+    "**/node_modules/**",
+    "**/.git/**"
+  ],
+  "autoFix": {
+    "import.*from\\s+['\"]@supabase/auth-helpers-nextjs['\"]": {
+      "replace": (match) => {
+        return match.replace("@supabase/auth-helpers-nextjs", "@supabase/ssr");
+      }
+    },
+    "createClientComponentClient": {
+      "replace": "createBrowserClient"
+    },
+    "createServerComponentClient": {
+      "replace": "createServerClient"
+    },
+    "createMiddlewareClient": {
+      "replace": "createServerClient"
+    }
+  }
+} 
